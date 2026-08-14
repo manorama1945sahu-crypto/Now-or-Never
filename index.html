@@ -1436,13 +1436,15 @@ $("saveBtn").addEventListener(
 
     if(error){
 
-      console.error(error);
+  console.error("FULL SUPABASE ERROR:", error);
 
-      showToast(error.message);
+  alert(JSON.stringify(error, null, 2));
 
-      return;
+  showToast(error.message);
 
-    }
+  return;
+
+}
 
 
     const result =

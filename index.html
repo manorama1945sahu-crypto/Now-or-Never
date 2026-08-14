@@ -1931,7 +1931,7 @@ async function renderPersonal(){
   const {data:logs,error}=await supabaseClient
     .from("study_logs")
     .select("study_date,effective_hours")
-    .eq("user_id",currentUser.id)
+    .eq("student_id",currentUser.id)
     .order("study_date",{ascending:true});
 
   if(error){
@@ -2075,7 +2075,7 @@ async function renderStudyChart(){
   const {data,error}=await supabaseClient
     .from("study_logs")
     .select("study_date,effective_hours")
-    .eq("user_id",currentUser.id)
+    .eq("student_id",currentUser.id)
     .gte("study_date",startKey)
     .lte("study_date",endKey)
     .order("study_date",{ascending:true});

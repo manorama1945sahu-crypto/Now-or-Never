@@ -847,6 +847,45 @@ input::placeholder{
   .nav button{font-size:9.5px;padding:8px 2px}
 }
 
+
+
+/* =========================
+   FINAL COMPACT TASK + BOARD
+========================= */
+.task-summary{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.task-summary-title{font-size:14px;font-weight:800}
+.task-summary-count{font-size:11px;color:var(--muted)}
+.task-progress{height:4px;background:#292929;border-radius:8px;overflow:hidden;margin-top:6px}
+.task-progress span{display:block;height:100%;background:#aaa;border-radius:8px}
+.task-person{background:#101010;border:1px solid var(--border);border-radius:11px;padding:9px 10px;margin-bottom:7px}
+.task-person-head{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.task-person-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;background:#242424;border:1px solid #353535;display:grid;place-items:center;font-size:9px;font-weight:800;flex:0 0 30px}
+.task-person-name{font-size:12px;font-weight:800;flex:1;min-width:0}
+.task-person-count{font-size:10px;color:var(--muted)}
+.task-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-top:1px solid #292929}
+.task-check{width:16px;height:16px;flex:0 0 16px;cursor:pointer}
+.task-label{font-size:11px;line-height:1.35;flex:1;word-break:break-word}
+.task-label.done{text-decoration:line-through;color:#666}
+.task-delete{border:0;background:none;color:#666;padding:2px 4px;font-size:11px}
+.task-add{display:flex;gap:6px;margin-top:7px}
+.task-add input{height:34px;font-size:11px}
+.task-add button{height:34px;border:1px solid #444;background:#e9e9e9;color:#111;border-radius:8px;padding:0 10px;font-size:11px;font-weight:800}
+.task-owner-note{font-size:9px;color:#666;margin-top:6px}
+.board-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.board-refresh{border:1px solid #333;background:#191919;color:var(--muted);border-radius:7px;padding:5px 8px;font-size:10px}
+.board-total{font-size:10px;color:var(--muted);margin-bottom:5px}
+.leader{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.leader:last-child{border-bottom:0}
+.leader.me{background:#1b1b1b;border-radius:9px;padding:9px 7px;margin:0 -7px}
+.rank{width:23px;text-align:center;color:var(--muted);font-weight:800;font-size:12px}
+.avatar{width:32px;height:32px;border-radius:50%;background:#242424;border:1px solid #353535;display:grid;place-items:center;font-size:10px;font-weight:800;flex:0 0 32px;object-fit:cover}
+.leader-main{flex:1;min-width:0}
+.leader-name{font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.leader-meta{font-size:9px;color:var(--muted);margin-top:2px}
+.points{font-size:13px;font-weight:850;min-width:42px;text-align:right}
+.progress{height:3px;background:#292929;border-radius:4px;margin-top:5px;overflow:hidden}
+.progress span{display:block;height:100%;background:#aaa;border-radius:4px}
+
 </style>
 </head>
 
@@ -1234,35 +1273,15 @@ input::placeholder{
     <section class="view" id="leaderboard">
 
       <div class="card">
-
-        <p class="card-title">
-          🏆 All-time leaderboard
-        </p>
-
-        <div id="boardList">
-          <div class="loading">
-            Loading leaderboard...
-          </div>
+        <div class="board-header">
+          <p class="card-title" style="margin:0">🏆 Leaderboard</p>
+          <button class="board-refresh" onclick="renderBoard()">↻ Refresh</button>
         </div>
-
-      </div>
-
-
-      <div class="card">
-
-        <p class="card-title">
-          Group totals
-        </p>
-
-        <div
-          class="stat-grid"
-          id="groupStats"
-        ></div>
-
+        <div class="board-total" id="boardTotal">Loading...</div>
+        <div id="boardList"><div class="loading">Loading leaderboard...</div></div>
       </div>
 
     </section>
-
 
 
     <!-- =========================
@@ -2592,10 +2611,7 @@ async function deleteTask(id){
 }
 
 function startRealtime(){
-  if(taskChannel) supabaseClient.removeChannel(taskChannel);
-  if(profileChannel) supabaseClient.removeChannel(profileChannel);
-  if(testChannel) supabaseClient.removeChannel(testChannel);
-  if(studyChannel) supabaseClient.removeChannel(studyChannel);
+  stopRealtime();
 
   taskChannel = supabaseClient
     .channel("shared-tasks-live")
@@ -2608,7 +2624,7 @@ function startRealtime(){
   profileChannel = supabaseClient
     .channel("shared-profiles-live")
     .on("postgres_changes",
-      {event:"UPDATE",schema:"public",table:"profiles"},
+      {event:"*",schema:"public",table:"profiles"},
       () => {
         renderBoard();
         renderTasks();
@@ -2620,23 +2636,23 @@ function startRealtime(){
   testChannel = supabaseClient
     .channel("my-tests-live")
     .on("postgres_changes",
-      {event:"*",schema:"public",table:"test_scores",filter:`user_id=eq.${currentUser.id}`},
+      {event:"*",schema:"public",table:"test_scores"},
       () => {
         renderTests();
         renderBoard();
-        loadProfile();
-        renderPersonal();
+        if(currentUser){ loadProfile(); renderPersonal(); }
       }
     )
     .subscribe();
 
   studyChannel = supabaseClient
-    .channel("my-study-live")
+    .channel("study-live")
     .on("postgres_changes",
-      {event:"*",schema:"public",table:"study_logs",filter:`user_id=eq.${currentUser.id}`},
+      {event:"*",schema:"public",table:"study_logs"},
       () => {
+        renderBoard();
         renderStudyChart();
-        renderPersonal();
+        if(currentUser) renderPersonal();
       }
     )
     .subscribe();
@@ -2948,214 +2964,62 @@ $("saveBtn").addEventListener(
 ============================================ */
 
 async function renderBoard(){
+  const list=$("boardList");
+  const total=$("boardTotal");
+  if(!list) return;
 
-  $("boardList").innerHTML =
-    `<div class="loading">
-      Loading leaderboard...
-    </div>`;
+  list.innerHTML=`<div class="loading">Loading...</div>`;
 
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select(
-        "id,username,display_name,points,effective_hours,avatar_url"
-      )
-      .order(
-        "points",
-        {
-          ascending:false
-        }
-      );
-
+  const {data,error}=await supabaseClient
+    .from("profiles")
+    .select("id,username,display_name,points,effective_hours,avatar_url")
+    .order("points",{ascending:false,nullsFirst:false});
 
   if(error){
-
-    console.error(error);
-
-    $("boardList").innerHTML =
-      `<div class="empty">
-        Could not load leaderboard.
-      </div>`;
-
+    console.error("LEADERBOARD ERROR:",error);
+    list.innerHTML=`<div class="empty">Could not load leaderboard.</div>`;
+    if(total) total.textContent="Unable to load";
     return;
-
   }
 
-
-  if(!data.length){
-
-    $("boardList").innerHTML =
-      `<div class="empty">
-        No students yet.
-      </div>`;
-
+  if(!data || !data.length){
+    list.innerHTML=`<div class="empty">No students yet.</div>`;
+    if(total) total.textContent="0 students";
     return;
-
   }
 
+  const totalPoints=data.reduce((sum,u)=>sum+(Number(u.points)||0),0);
+  const maxPoints=Math.max(1,...data.map(u=>Number(u.points)||0));
+  if(total) total.textContent=`${data.length} students · ${totalPoints.toFixed(0)} total points`;
 
-  const max =
-    Math.max(
-      1,
-      ...data.map(
-        student =>
-          Number(student.points) || 0
-      )
-    );
+  list.innerHTML=data.map((student,index)=>{
+    const points=Number(student.points)||0;
+    const hours=Number(student.effective_hours)||0;
+    const width=Math.min(100,Math.max(0,points/maxPoints*100));
+    const isMe=currentUser && student.id===currentUser.id;
+    const rank=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;
+    const avatar=student.avatar_url
+      ? `<img class="avatar" src="${escapeHtml(student.avatar_url)}" alt="">`
+      : `<div class="avatar">${escapeHtml(initials(student.display_name))}</div>`;
 
-
-  $("boardList").innerHTML =
-    data.map(
-      (student,index) => {
-
-        const points =
-          Number(student.points) || 0;
-
-        const hours =
-          Number(
-            student.effective_hours
-          ) || 0;
-
-
-        const medal =
-          index === 0
-            ? "🥇"
-            : index === 1
-            ? "🥈"
-            : index === 2
-            ? "🥉"
-            : String(index + 1);
-
-
-        const width =
-          Math.max(
-            0,
-            Math.min(
-              100,
-              points / max * 100
-            )
-          );
-
-
-        const isMe =
-          currentUser &&
-          student.id === currentUser.id;
-
-
-        return `
-
-          <div
-            class="
-              leader
-              ${isMe ? "me" : ""}
-            "
-          >
-
-            <div class="rank">
-              ${medal}
-            </div>
-
-
-            ${student.avatar_url
-              ? `<img class="avatar" style="object-fit:cover" src="${escapeHtml(student.avatar_url)}" alt="">`
-              : `<div class="avatar">${escapeHtml(initials(student.display_name))}</div>`}
-
-
-            <div class="leader-main">
-
-              <div class="leader-name">
-
-                ${escapeHtml(
-                  student.display_name
-                )}
-
-                ${
-                  isMe
-                    ? " · You"
-                    : ""
-                }
-
-              </div>
-
-
-              <div class="leader-meta">
-
-                ${hours.toFixed(1)}h
-
-                ·
-
-                ${student.username
-                  ? "@" +
-                    escapeHtml(
-                      student.username
-                    )
-                  : ""
-                }
-
-              </div>
-
-
-              <div class="progress">
-
-                <span
-                  style="
-                    width:${width}%
-                  "
-                ></span>
-
-              </div>
-
-            </div>
-
-
-            <div class="points">
-              ${points.toFixed(0)}
-            </div>
-
-          </div>
-
-        `;
-
-      }
-    ).join("");
-
-
-  const totalPoints =
-    data.reduce(
-      (sum,student) =>
-        sum +
-        (Number(student.points) || 0),
-      0
-    );
-
-
-  const totalHours =
-    data.reduce(
-      (sum,student) =>
-        sum +
-        (Number(
-          student.effective_hours
-        ) || 0),
-      0
-    );
-
-
-  await renderGroupStats(
-    data,
-    totalPoints,
-    totalHours
-  );
-
+    return `<div class="leader ${isMe?"me":""}">
+      <div class="rank">${rank}</div>
+      ${avatar}
+      <div class="leader-main">
+        <div class="leader-name">${escapeHtml(student.display_name||"Student")}${isMe?" · You":""}</div>
+        <div class="leader-meta">${hours.toFixed(1)}h${student.username?" · @"+escapeHtml(student.username):""}</div>
+        <div class="progress"><span style="width:${width}%"></span></div>
+      </div>
+      <div class="points">${points.toFixed(0)}</div>
+    </div>`;
+  }).join("");
 }
 
 
 /* ============================================
    GROUP STATS
 ============================================ */
+
 
 async function renderGroupStats(
   students,

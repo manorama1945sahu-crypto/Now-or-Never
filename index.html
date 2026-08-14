@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#111111">
 <title>Study Accountability</title>
+
 <style>
 :root{
   --bg:#0b0b0b;
@@ -19,334 +20,2199 @@
   --red:#e4a4a4;
   --yellow:#ddd09b;
 }
+
 *{box-sizing:border-box}
+
 html{scroll-behavior:smooth}
+
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,
+  "Segoe UI",Roboto,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;
 }
+
 button,input,select{font:inherit}
 button{cursor:pointer}
-.app{max-width:760px;margin:0 auto;padding:22px 16px 44px}
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.brand{display:flex;align-items:center;gap:11px}
+
+.app{
+  max-width:760px;
+  margin:0 auto;
+  padding:22px 16px 44px
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:24px
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px
+}
+
 .logo{
-  width:38px;height:38px;border:1px solid var(--border);border-radius:11px;
-  display:grid;place-items:center;background:#111;font-size:18px
+  width:38px;
+  height:38px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  background:#111;
+  font-size:18px
 }
-h1{font-size:19px;letter-spacing:-.3px;margin:0;font-weight:750}
-.header-date{font-size:12px;color:var(--muted)}
+
+h1{
+  font-size:19px;
+  letter-spacing:-.3px;
+  margin:0;
+  font-weight:750
+}
+
+.header-date{
+  font-size:12px;
+  color:var(--muted)
+}
+
 .nav{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
-  padding:4px;background:#101010;border:1px solid var(--border);border-radius:12px;margin-bottom:16px
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  padding:4px;
+  background:#101010;
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:16px
 }
+
 .nav button{
-  border:0;background:transparent;color:var(--muted);padding:9px 6px;border-radius:8px;font-size:13px;font-weight:650
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:9px 6px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:650
 }
-.nav button.active{background:#242424;color:var(--text)}
-.view{display:none;animation:fade .18s ease}
-.view.active{display:block}
-@keyframes fade{from{opacity:.4;transform:translateY(2px)}to{opacity:1;transform:none}}
+
+.nav button.active{
+  background:#242424;
+  color:var(--text)
+}
+
+.view{
+  display:none;
+  animation:fade .18s ease
+}
+
+.view.active{
+  display:block
+}
+
+@keyframes fade{
+  from{opacity:.4;transform:translateY(2px)}
+  to{opacity:1;transform:none}
+}
+
 .card{
-  background:var(--surface);border:1px solid var(--border);border-radius:15px;
-  padding:16px;margin-bottom:12px
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:16px;
+  margin-bottom:12px
 }
-.card-title{font-size:14px;font-weight:750;margin:0 0 14px}
-label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.field.full{grid-column:1/-1}
+
+.card-title{
+  font-size:14px;
+  font-weight:750;
+  margin:0 0 14px
+}
+
+label{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:6px
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+
+.field.full{
+  grid-column:1/-1
+}
+
 input,select{
-  width:100%;height:44px;border-radius:10px;border:1px solid #303030;
-  background:#101010;color:var(--text);outline:none;padding:0 12px;
+  width:100%;
+  height:44px;
+  border-radius:10px;
+  border:1px solid #303030;
+  background:#101010;
+  color:var(--text);
+  outline:none;
+  padding:0 12px;
   transition:border-color .15s,background .15s
 }
-input:focus,select:focus{border-color:#686868;background:#131313}
-input::placeholder{color:#666}
+
+input:focus,select:focus{
+  border-color:#686868;
+  background:#131313
+}
+
+input::placeholder{
+  color:#666
+}
+
 .primary{
-  width:100%;height:46px;margin-top:14px;border:1px solid #444;border-radius:10px;
-  background:#f1f1f1;color:#0a0a0a;font-weight:800;transition:transform .12s,background .12s
+  width:100%;
+  height:46px;
+  margin-top:14px;
+  border:1px solid #444;
+  border-radius:10px;
+  background:#f1f1f1;
+  color:#0a0a0a;
+  font-weight:800;
+  transition:transform .12s,background .12s
 }
-.primary:active{transform:scale(.99);background:#d8d8d8}
-.notice{font-size:12px;color:var(--muted);line-height:1.55;margin:0 0 14px}
-.result{display:none}
-.result.show{display:block}
-.result-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
-.score{font-size:42px;line-height:1;font-weight:850;letter-spacing:-1.5px}
-.score.pos{color:var(--green)}.score.neg{color:var(--red)}
-.result-name{font-size:13px;color:var(--muted);text-align:right}
-.breakdown{margin-top:16px;border-top:1px solid var(--border)}
-.line{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
-.line span:first-child{color:var(--muted)}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#111;border:1px solid var(--border);border-radius:11px;padding:12px}
-.stat .value{font-size:20px;font-weight:800;margin-top:4px}
-.stat .label{font-size:11px;color:var(--muted)}
-.leader{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--border)}
-.leader:last-child{border-bottom:0}
-.rank{width:25px;text-align:center;color:var(--muted);font-weight:750}
-.avatar{width:36px;height:36px;border-radius:50%;background:#242424;border:1px solid #353535;display:grid;place-items:center;font-size:12px;font-weight:800}
-.leader-main{flex:1;min-width:0}
-.leader-name{font-size:14px;font-weight:700}
-.leader-meta{font-size:11px;color:var(--muted);margin-top:2px}
-.points{font-size:15px;font-weight:800}
-.progress{height:4px;background:#292929;border-radius:4px;margin-top:7px;overflow:hidden}
-.progress span{display:block;height:100%;background:#aaa;border-radius:4px}
-.empty{color:var(--muted);font-size:13px;text-align:center;padding:20px 0}
-.history-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.history-row:last-child{border-bottom:0}
-.history-name{font-weight:700;font-size:13px}.history-meta{color:var(--muted);font-size:11px;margin-top:3px}
-.history-points{font-weight:800;font-size:13px;white-space:nowrap}
-.small-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}
-.danger{color:var(--red)}
+
+.primary:active{
+  transform:scale(.99);
+  background:#d8d8d8
+}
+
+.secondary{
+  width:100%;
+  height:44px;
+  margin-top:10px;
+  border:1px solid #333;
+  border-radius:10px;
+  background:#191919;
+  color:var(--text);
+  font-weight:700
+}
+
+.notice{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.55;
+  margin:0 0 14px
+}
+
+.result{
+  display:none
+}
+
+.result.show{
+  display:block
+}
+
+.result-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px
+}
+
+.score{
+  font-size:42px;
+  line-height:1;
+  font-weight:850;
+  letter-spacing:-1.5px
+}
+
+.score.pos{color:var(--green)}
+.score.neg{color:var(--red)}
+
+.result-name{
+  font-size:13px;
+  color:var(--muted);
+  text-align:right
+}
+
+.breakdown{
+  margin-top:16px;
+  border-top:1px solid var(--border)
+}
+
+.line{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px
+}
+
+.line span:first-child{
+  color:var(--muted)
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px
+}
+
+.stat{
+  background:#111;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px
+}
+
+.stat .value{
+  font-size:20px;
+  font-weight:800;
+  margin-top:4px
+}
+
+.stat .label{
+  font-size:11px;
+  color:var(--muted)
+}
+
+.leader{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border)
+}
+
+.leader:last-child{
+  border-bottom:0
+}
+
+.leader.me{
+  background:#1b1b1b;
+  border-radius:10px;
+  padding:12px 8px;
+  margin:0 -8px
+}
+
+.rank{
+  width:25px;
+  text-align:center;
+  color:var(--muted);
+  font-weight:750
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#242424;
+  border:1px solid #353535;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:800
+}
+
+.leader-main{
+  flex:1;
+  min-width:0
+}
+
+.leader-name{
+  font-size:14px;
+  font-weight:700
+}
+
+.leader-meta{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px
+}
+
+.points{
+  font-size:15px;
+  font-weight:800
+}
+
+.progress{
+  height:4px;
+  background:#292929;
+  border-radius:4px;
+  margin-top:7px;
+  overflow:hidden
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  background:#aaa;
+  border-radius:4px
+}
+
+.empty{
+  color:var(--muted);
+  font-size:13px;
+  text-align:center;
+  padding:20px 0
+}
+
+.history-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border)
+}
+
+.history-row:last-child{
+  border-bottom:0
+}
+
+.history-name{
+  font-weight:700;
+  font-size:13px
+}
+
+.history-meta{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:3px
+}
+
+.history-points{
+  font-weight:800;
+  font-size:13px;
+  white-space:nowrap
+}
+
+.small-note{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-top:10px
+}
+
+.auth-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px
+}
+
+.auth-box{
+  width:100%;
+  max-width:430px
+}
+
+.auth-logo{
+  text-align:center;
+  font-size:40px;
+  margin-bottom:12px
+}
+
+.auth-title{
+  text-align:center;
+  font-size:26px;
+  font-weight:850;
+  margin:0
+}
+
+.auth-subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin:8px 0 22px
+}
+
+.auth-switch{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:14px
+}
+
+.auth-switch button{
+  border:0;
+  background:none;
+  color:var(--text);
+  font-weight:700;
+  padding:0
+}
+
+.logout{
+  border:1px solid var(--border);
+  background:#151515;
+  color:var(--muted);
+  border-radius:9px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:700
+}
+
+.user-info{
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:12px
+}
+
+.hidden{
+  display:none!important
+}
+
+.loading{
+  color:var(--muted);
+  text-align:center;
+  padding:20px;
+  font-size:13px
+}
+
+.danger{
+  color:var(--red)
+}
+
 .toast{
-  position:fixed;left:50%;bottom:22px;transform:translate(-50%,15px);
-  background:#eee;color:#111;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;
-  opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 25px #0008;z-index:10
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translate(-50%,15px);
+  background:#eee;
+  color:#111;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:700;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  box-shadow:0 8px 25px #0008;
+  z-index:10;
+  max-width:90%;
+  text-align:center
 }
-.toast.show{opacity:1;transform:translate(-50%,0)}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0)
+}
+
 @media(max-width:480px){
-  .app{padding:17px 13px 38px}
-  .grid{gap:10px}
-  .stat-grid{grid-template-columns:1fr 1fr 1fr}
-  .score{font-size:38px}
+  .app{
+    padding:17px 13px 38px
+  }
+
+  .grid{
+    gap:10px
+  }
+
+  .stat-grid{
+    grid-template-columns:1fr 1fr 1fr
+  }
+
+  .score{
+    font-size:38px
+  }
 }
 </style>
 </head>
+
 <body>
-<div class="app">
+
+<!-- =========================
+     LOGIN / SIGNUP SCREEN
+========================= -->
+
+<section class="auth-screen" id="authScreen">
+
+  <div class="auth-box">
+
+    <div class="auth-logo">📚</div>
+
+    <h1 class="auth-title">Study Accountability</h1>
+
+    <p class="auth-subtitle">
+      Study hard · Compete · Rise
+    </p>
+
+    <!-- LOGIN -->
+
+    <div class="card" id="loginBox">
+
+      <p class="card-title">Login</p>
+
+      <div class="field">
+        <label>Email</label>
+        <input id="loginEmail" type="email" placeholder="you@example.com">
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label>Password</label>
+        <input id="loginPassword" type="password" placeholder="Your password">
+      </div>
+
+      <button class="primary" id="loginBtn">
+        Login
+      </button>
+
+      <div class="auth-switch">
+        Don't have an account?
+        <button id="showSignup">Create one</button>
+      </div>
+
+    </div>
+
+
+    <!-- SIGNUP -->
+
+    <div class="card hidden" id="signupBox">
+
+      <p class="card-title">Create account</p>
+
+      <div class="field">
+        <label>Display name</label>
+        <input id="signupName" type="text" placeholder="Your name">
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label>Username</label>
+        <input id="signupUsername" type="text" placeholder="e.g. shadowrhys">
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label>Email</label>
+        <input id="signupEmail" type="email" placeholder="you@example.com">
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label>Password</label>
+        <input id="signupPassword" type="password" placeholder="At least 6 characters">
+      </div>
+
+      <button class="primary" id="signupBtn">
+        Create account
+      </button>
+
+      <div class="auth-switch">
+        Already have an account?
+        <button id="showLogin">Login</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     MAIN APPLICATION
+========================= -->
+
+<div class="app hidden" id="mainApp">
 
   <header class="header">
+
     <div class="brand">
+
       <div class="logo">📚</div>
+
       <div>
+
         <h1>Study Accountability</h1>
+
         <div class="header-date" id="todayText"></div>
+
       </div>
+
     </div>
+
+    <button class="logout" id="logoutBtn">
+      Logout
+    </button>
+
   </header>
 
+
+  <div class="user-info" id="userInfo"></div>
+
+
   <nav class="nav">
-    <button class="active" data-view="daily">Daily</button>
-    <button data-view="leaderboard">Leaderboard</button>
-    <button data-view="history">History</button>
+
+    <button class="active" data-view="daily">
+      Daily
+    </button>
+
+    <button data-view="leaderboard">
+      Leaderboard
+    </button>
+
+    <button data-view="history">
+      History
+    </button>
+
   </nav>
 
+
   <main>
+
+    <!-- =========================
+         DAILY
+    ========================== -->
+
     <section class="view active" id="daily">
+
       <div class="card">
-        <p class="card-title">Today's entry</p>
-        <p class="notice">
-          Points: +12 per effective study hour · +10 per completed task ·
-          −5 per missed task · −3 per wasted hour.
+
+        <p class="card-title">
+          Today's entry
         </p>
 
+        <p class="notice">
+          Points: +12 per effective study hour ·
+          +10 per completed task ·
+          −5 per missed task ·
+          −3 per wasted hour.
+        </p>
+
+
         <div class="grid">
-          <div class="field">
-            <label>Member</label>
-            <select id="member">
-              <option>bishnu</option>
-              <option>Ayush</option>
-              <option>Biswajit</option>
-              <option>Surjit</option>
-              <option>Annada</option>
-            </select>
-          </div>
 
           <div class="field">
+
+            <label>Student</label>
+
+            <input
+              id="member"
+              type="text"
+              readonly
+            >
+
+          </div>
+
+
+          <div class="field">
+
             <label>Date</label>
-            <input id="date" type="date">
+
+            <input
+              id="date"
+              type="date"
+            >
+
           </div>
 
+
           <div class="field">
+
             <label>Effective study hours</label>
-            <input id="hours" type="number" min="0" max="24" step="0.25" placeholder="e.g. 4.5">
+
+            <input
+              id="hours"
+              type="number"
+              min="0"
+              max="24"
+              step="0.25"
+              placeholder="e.g. 4.5"
+            >
+
           </div>
 
+
           <div class="field">
+
             <label>Wasted hours</label>
-            <input id="wasted" type="number" min="0" max="24" step="0.25" placeholder="e.g. 1.5">
+
+            <input
+              id="wasted"
+              type="number"
+              min="0"
+              max="24"
+              step="0.25"
+              placeholder="e.g. 1.5"
+            >
+
           </div>
 
+
           <div class="field">
+
             <label>Total tasks</label>
-            <input id="total" type="number" min="0" step="1" placeholder="e.g. 7">
+
+            <input
+              id="total"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="e.g. 7"
+            >
+
           </div>
 
+
           <div class="field">
+
             <label>Completed tasks</label>
-            <input id="completed" type="number" min="0" step="1" placeholder="e.g. 6">
+
+            <input
+              id="completed"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="e.g. 6"
+            >
+
           </div>
+
 
           <div class="field full">
-            <label>Satisfaction · 0–10</label>
-            <input id="satisfaction" type="number" min="0" max="10" step="0.5" placeholder="e.g. 8">
+
+            <label>
+              Satisfaction · 0–10
+            </label>
+
+            <input
+              id="satisfaction"
+              type="number"
+              min="0"
+              max="10"
+              step="0.5"
+              placeholder="e.g. 8"
+            >
+
+          </div>
+
+        </div>
+
+
+        <button class="primary" id="saveBtn">
+          Calculate & Save
+        </button>
+
+      </div>
+
+
+      <div class="card result" id="result"></div>
+
+    </section>
+
+
+    <!-- =========================
+         LEADERBOARD
+    ========================== -->
+
+    <section class="view" id="leaderboard">
+
+      <div class="card">
+
+        <p class="card-title">
+          🏆 All-time leaderboard
+        </p>
+
+        <div id="boardList">
+          <div class="loading">
+            Loading leaderboard...
           </div>
         </div>
 
-        <button class="primary" id="saveBtn">Calculate & save</button>
       </div>
 
-      <div class="card result" id="result"></div>
-    </section>
-
-    <section class="view" id="leaderboard">
-      <div class="card">
-        <p class="card-title">🏆 All-time leaderboard</p>
-        <div id="boardList"></div>
-      </div>
 
       <div class="card">
-        <p class="card-title">Group totals</p>
-        <div class="stat-grid" id="groupStats"></div>
+
+        <p class="card-title">
+          Group totals
+        </p>
+
+        <div
+          class="stat-grid"
+          id="groupStats"
+        ></div>
+
       </div>
+
     </section>
+
+
+    <!-- =========================
+         HISTORY
+    ========================== -->
 
     <section class="view" id="history">
+
       <div class="card">
-        <p class="card-title">Recent entries</p>
-        <div id="historyList"></div>
-      </div>
-      <div class="card">
-        <p class="small-note">
-          Data is stored in this browser on this device. Clearing browser/site data will remove it.
-          This version is local; a shared online database can be connected later.
+
+        <p class="card-title">
+          Recent entries
         </p>
+
+        <div id="historyList">
+          <div class="loading">
+            Loading history...
+          </div>
+        </div>
+
       </div>
+
+
+      <div class="card">
+
+        <p class="small-note">
+          Your study data is stored securely in the
+          online group database.
+        </p>
+
+      </div>
+
     </section>
+
   </main>
+
 </div>
+
 
 <div class="toast" id="toast"></div>
 
-<script>
-const STORAGE_KEY = "studyAccountabilityMinimalV2";
-const MEMBERS = ["bishnu","Ayush","Biswajit","Surjit","Annada"];
 
-const $ = id => document.getElementById(id);
-let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+<!-- Supabase JavaScript library -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* ============================================
+   SUPABASE CONFIGURATION
+============================================ */
+
+const SUPABASE_URL =
+  "https://kvbbgvfrllptqpbkixnv.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_YaS6ZJfi4VrAbtGymRBr6w_ocpvX0I-";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* ============================================
+   HELPERS
+============================================ */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+let currentUser = null;
+let currentProfile = null;
+
 
 function localDate(){
+
   const d = new Date();
-  return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+
+  return new Date(
+    d.getTime() -
+    d.getTimezoneOffset() * 60000
+  )
+  .toISOString()
+  .slice(0,10);
+
 }
+
+
 function formatDate(value){
-  return new Date(value+"T00:00:00").toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+
+  return new Date(
+    value + "T00:00:00"
+  ).toLocaleDateString(
+    "en-IN",
+    {
+      day:"2-digit",
+      month:"short",
+      year:"numeric"
+    }
+  );
+
 }
-function pointsFor(hours,total,completed,wasted){
-  const missed = total - completed;
-  return (hours*12) + (completed*10) - (missed*5) - (wasted*3);
+
+
+function initials(name){
+
+  if(!name) return "?";
+
+  return name
+    .slice(0,2)
+    .toUpperCase();
+
 }
+
+
 function showToast(message){
-  const t=$("toast"); t.textContent=message; t.classList.add("show");
-  clearTimeout(showToast.timer); showToast.timer=setTimeout(()=>t.classList.remove("show"),2200);
+
+  const t = $("toast");
+
+  t.textContent = message;
+
+  t.classList.add("show");
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer =
+    setTimeout(
+      () => t.classList.remove("show"),
+      2600
+    );
+
 }
-function initials(name){ return name.slice(0,2).toUpperCase(); }
 
-$("date").value=localDate();
-$("todayText").textContent=new Date().toLocaleDateString("en-IN",{weekday:"short",day:"2-digit",month:"short"});
 
-document.querySelectorAll(".nav button").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
-    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-    btn.classList.add("active");
-    $(btn.dataset.view).classList.add("active");
-    render();
-  });
-});
+/* ============================================
+   AUTH SCREEN
+============================================ */
 
-$("saveBtn").addEventListener("click",()=>{
-  const name=$("member").value;
-  const date=$("date").value;
-  const hours=Number($("hours").value)||0;
-  const wasted=Number($("wasted").value)||0;
-  const total=Number($("total").value)||0;
-  const completed=Number($("completed").value)||0;
-  const satisfaction=Number($("satisfaction").value);
+$("showSignup").addEventListener(
+  "click",
+  () => {
 
-  if(!date){showToast("Choose a date.");return;}
-  if(hours<0||wasted<0||hours>24||wasted>24){showToast("Hours must be between 0 and 24.");return;}
-  if(total<0||completed<0||completed>total){showToast("Check the task numbers.");return;}
-  if(Number.isNaN(satisfaction)||satisfaction<0||satisfaction>10){showToast("Satisfaction must be 0–10.");return;}
+    $("loginBox").classList.add("hidden");
+    $("signupBox").classList.remove("hidden");
 
-  const points=pointsFor(hours,total,completed,wasted);
+  }
+);
 
-  entries=entries.filter(e=>!(e.name===name && e.date===date));
-  entries.push({name,date,hours,wasted,total,completed,satisfaction,points});
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(entries));
 
-  $("result").classList.add("show");
-  $("result").innerHTML=`
-    <div class="result-top">
-      <div>
-        <div class="muted" style="font-size:12px">Today's score</div>
-        <div class="score ${points>=0?"pos":"neg"}">${points.toFixed(1)}</div>
+$("showLogin").addEventListener(
+  "click",
+  () => {
+
+    $("signupBox").classList.add("hidden");
+    $("loginBox").classList.remove("hidden");
+
+  }
+);
+
+
+/* ============================================
+   SIGN UP
+============================================ */
+
+$("signupBtn").addEventListener(
+  "click",
+  async () => {
+
+    const name =
+      $("signupName").value.trim();
+
+    const username =
+      $("signupUsername").value.trim()
+      .toLowerCase();
+
+    const email =
+      $("signupEmail").value.trim();
+
+    const password =
+      $("signupPassword").value;
+
+
+    if(!name){
+
+      showToast("Enter your name.");
+
+      return;
+
+    }
+
+
+    if(!username){
+
+      showToast("Enter a username.");
+
+      return;
+
+    }
+
+
+    if(!email){
+
+      showToast("Enter your email.");
+
+      return;
+
+    }
+
+
+    if(password.length < 6){
+
+      showToast(
+        "Password must be at least 6 characters."
+      );
+
+      return;
+
+    }
+
+
+    $("signupBtn").disabled = true;
+
+    $("signupBtn").textContent =
+      "Creating account...";
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options: {
+
+          data: {
+
+            username: username,
+
+            display_name: name
+
+          }
+
+        }
+
+      });
+
+
+    $("signupBtn").disabled = false;
+
+    $("signupBtn").textContent =
+      "Create account";
+
+
+    if(error){
+
+      showToast(error.message);
+
+      return;
+
+    }
+
+
+    if(data.session){
+
+      showToast(
+        "Account created successfully!"
+      );
+
+    }else{
+
+      showToast(
+        "Account created. Check your email to confirm it."
+      );
+
+    }
+
+  }
+);
+
+
+/* ============================================
+   LOGIN
+============================================ */
+
+$("loginBtn").addEventListener(
+  "click",
+  async () => {
+
+    const email =
+      $("loginEmail").value.trim();
+
+    const password =
+      $("loginPassword").value;
+
+
+    if(!email || !password){
+
+      showToast(
+        "Enter email and password."
+      );
+
+      return;
+
+    }
+
+
+    $("loginBtn").disabled = true;
+
+    $("loginBtn").textContent =
+      "Logging in...";
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
+      });
+
+
+    $("loginBtn").disabled = false;
+
+    $("loginBtn").textContent =
+      "Login";
+
+
+    if(error){
+
+      showToast(error.message);
+
+      return;
+
+    }
+
+
+    showToast("Welcome back!");
+
+  }
+);
+
+
+/* ============================================
+   LOGOUT
+============================================ */
+
+$("logoutBtn").addEventListener(
+  "click",
+  async () => {
+
+    await supabaseClient.auth.signOut();
+
+    currentUser = null;
+
+    currentProfile = null;
+
+    showAuthScreen();
+
+  }
+);
+
+
+/* ============================================
+   AUTH STATE
+============================================ */
+
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
+
+    if(session && session.user){
+
+      currentUser = session.user;
+
+      await loadProfile();
+
+      showMainApp();
+
+      await refreshAll();
+
+    }else{
+
+      currentUser = null;
+
+      currentProfile = null;
+
+      showAuthScreen();
+
+    }
+
+  }
+);
+
+
+/* ============================================
+   SHOW / HIDE APPLICATION
+============================================ */
+
+function showAuthScreen(){
+
+  $("authScreen")
+    .classList.remove("hidden");
+
+  $("mainApp")
+    .classList.add("hidden");
+
+}
+
+
+function showMainApp(){
+
+  $("authScreen")
+    .classList.add("hidden");
+
+  $("mainApp")
+    .classList.remove("hidden");
+
+}
+
+
+/* ============================================
+   LOAD CURRENT PROFILE
+============================================ */
+
+async function loadProfile(){
+
+  if(!currentUser) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id", currentUser.id)
+      .single();
+
+
+  if(error){
+
+    console.error(error);
+
+    showToast(
+      "Could not load your profile."
+    );
+
+    return;
+
+  }
+
+
+  currentProfile = data;
+
+
+  $("member").value =
+    currentProfile.display_name;
+
+  $("userInfo").textContent =
+    "Logged in as " +
+    currentProfile.display_name +
+    " · @" +
+    currentProfile.username;
+
+}
+
+
+/* ============================================
+   SAVE DAILY STUDY LOG
+============================================ */
+
+$("saveBtn").addEventListener(
+  "click",
+  async () => {
+
+    if(!currentUser){
+
+      showToast("Please login first.");
+
+      return;
+
+    }
+
+
+    const date =
+      $("date").value;
+
+    const hours =
+      Number($("hours").value) || 0;
+
+    const wasted =
+      Number($("wasted").value) || 0;
+
+    const total =
+      Number($("total").value) || 0;
+
+    const completed =
+      Number($("completed").value) || 0;
+
+    const satisfaction =
+      Number($("satisfaction").value);
+
+
+    if(!date){
+
+      showToast("Choose a date.");
+
+      return;
+
+    }
+
+
+    if(
+      hours < 0 ||
+      hours > 24 ||
+      wasted < 0 ||
+      wasted > 24
+    ){
+
+      showToast(
+        "Hours must be between 0 and 24."
+      );
+
+      return;
+
+    }
+
+
+    if(
+      total < 0 ||
+      completed < 0 ||
+      completed > total
+    ){
+
+      showToast(
+        "Check the task numbers."
+      );
+
+      return;
+
+    }
+
+
+    if(
+      Number.isNaN(satisfaction) ||
+      satisfaction < 0 ||
+      satisfaction > 10
+    ){
+
+      showToast(
+        "Satisfaction must be 0–10."
+      );
+
+      return;
+
+    }
+
+
+    $("saveBtn").disabled = true;
+
+    $("saveBtn").textContent =
+      "Saving...";
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        "submit_study_log",
+        {
+          p_study_date: date,
+          p_effective_hours: hours,
+          p_wasted_hours: wasted,
+          p_total_tasks: total,
+          p_completed_tasks: completed,
+          p_satisfaction: satisfaction
+        }
+      );
+
+
+    $("saveBtn").disabled = false;
+
+    $("saveBtn").textContent =
+      "Calculate & Save";
+
+
+    if(error){
+
+      console.error(error);
+
+      showToast(error.message);
+
+      return;
+
+    }
+
+
+    const result =
+      data;
+
+
+    const points =
+      Number(result.points);
+
+
+    $("result").classList.add("show");
+
+
+    $("result").innerHTML = `
+
+      <div class="result-top">
+
+        <div>
+
+          <div
+            style="
+              font-size:12px;
+              color:var(--muted)
+            "
+          >
+            Today's score
+          </div>
+
+          <div
+            class="score ${
+              points >= 0
+                ? "pos"
+                : "neg"
+            }"
+          >
+            ${points.toFixed(1)}
+          </div>
+
+        </div>
+
+
+        <div class="result-name">
+
+          ${currentProfile.display_name}
+
+          <br>
+
+          ${formatDate(date)}
+
+        </div>
+
       </div>
-      <div class="result-name">${name}<br>${formatDate(date)}</div>
+
+
+      <div class="breakdown">
+
+        <div class="line">
+          <span>📚 Effective study</span>
+          <b>
+            +${(hours * 12).toFixed(1)}
+          </b>
+        </div>
+
+
+        <div class="line">
+          <span>✅ Completed tasks</span>
+          <b>
+            +${(completed * 10).toFixed(1)}
+          </b>
+        </div>
+
+
+        <div class="line">
+          <span>❌ Missed tasks</span>
+          <b>
+            ${-((total - completed) * 5).toFixed(1)}
+          </b>
+        </div>
+
+
+        <div class="line">
+          <span>😴 Wasted time</span>
+          <b>
+            ${-(wasted * 3).toFixed(1)}
+          </b>
+        </div>
+
+
+        <div class="line">
+          <span>🔥 Satisfaction</span>
+          <b>
+            ${satisfaction}/10
+          </b>
+        </div>
+
+
+        <div class="line">
+          <span>💰 Point change</span>
+          <b>
+            ${Number(result.point_change) >= 0 ? "+" : ""}
+            ${result.point_change}
+          </b>
+        </div>
+
+      </div>
+
+    `;
+
+
+    showToast(
+      "Study entry saved ✓"
+    );
+
+
+    $("hours").value = "";
+    $("wasted").value = "";
+    $("total").value = "";
+    $("completed").value = "";
+    $("satisfaction").value = "";
+
+
+    await loadProfile();
+
+    await refreshAll();
+
+  }
+);
+
+
+/* ============================================
+   LEADERBOARD
+============================================ */
+
+async function renderBoard(){
+
+  $("boardList").innerHTML =
+    `<div class="loading">
+      Loading leaderboard...
+    </div>`;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id,username,display_name,points,effective_hours"
+      )
+      .order(
+        "points",
+        {
+          ascending:false
+        }
+      );
+
+
+  if(error){
+
+    console.error(error);
+
+    $("boardList").innerHTML =
+      `<div class="empty">
+        Could not load leaderboard.
+      </div>`;
+
+    return;
+
+  }
+
+
+  if(!data.length){
+
+    $("boardList").innerHTML =
+      `<div class="empty">
+        No students yet.
+      </div>`;
+
+    return;
+
+  }
+
+
+  const max =
+    Math.max(
+      1,
+      ...data.map(
+        student =>
+          Number(student.points) || 0
+      )
+    );
+
+
+  $("boardList").innerHTML =
+    data.map(
+      (student,index) => {
+
+        const points =
+          Number(student.points) || 0;
+
+        const hours =
+          Number(
+            student.effective_hours
+          ) || 0;
+
+
+        const medal =
+          index === 0
+            ? "🥇"
+            : index === 1
+            ? "🥈"
+            : index === 2
+            ? "🥉"
+            : String(index + 1);
+
+
+        const width =
+          Math.max(
+            0,
+            Math.min(
+              100,
+              points / max * 100
+            )
+          );
+
+
+        const isMe =
+          currentUser &&
+          student.id === currentUser.id;
+
+
+        return `
+
+          <div
+            class="
+              leader
+              ${isMe ? "me" : ""}
+            "
+          >
+
+            <div class="rank">
+              ${medal}
+            </div>
+
+
+            <div class="avatar">
+              ${initials(
+                student.display_name
+              )}
+            </div>
+
+
+            <div class="leader-main">
+
+              <div class="leader-name">
+
+                ${escapeHtml(
+                  student.display_name
+                )}
+
+                ${
+                  isMe
+                    ? " · You"
+                    : ""
+                }
+
+              </div>
+
+
+              <div class="leader-meta">
+
+                ${hours.toFixed(1)}h
+
+                ·
+
+                ${student.username
+                  ? "@" +
+                    escapeHtml(
+                      student.username
+                    )
+                  : ""
+                }
+
+              </div>
+
+
+              <div class="progress">
+
+                <span
+                  style="
+                    width:${width}%
+                  "
+                ></span>
+
+              </div>
+
+            </div>
+
+
+            <div class="points">
+              ${points.toFixed(0)}
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
+
+  const totalPoints =
+    data.reduce(
+      (sum,student) =>
+        sum +
+        (Number(student.points) || 0),
+      0
+    );
+
+
+  const totalHours =
+    data.reduce(
+      (sum,student) =>
+        sum +
+        (Number(
+          student.effective_hours
+        ) || 0),
+      0
+    );
+
+
+  await renderGroupStats(
+    data,
+    totalPoints,
+    totalHours
+  );
+
+}
+
+
+/* ============================================
+   GROUP STATS
+============================================ */
+
+async function renderGroupStats(
+  students,
+  totalPoints,
+  totalHours
+){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("study_logs")
+      .select(
+        "tasks_completed"
+      );
+
+
+  const totalTasks =
+    error
+      ? 0
+      : data.reduce(
+          (sum,row) =>
+            sum +
+            Number(
+              row.tasks_completed || 0
+            ),
+          0
+        );
+
+
+  $("groupStats").innerHTML = `
+
+    <div class="stat">
+
+      <div class="label">
+        Students
+      </div>
+
+      <div class="value">
+        ${students.length}
+      </div>
+
     </div>
-    <div class="breakdown">
-      <div class="line"><span>📚 Effective study</span><b>+${(hours*12).toFixed(1)}</b></div>
-      <div class="line"><span>✅ Completed tasks</span><b>+${(completed*10).toFixed(1)}</b></div>
-      <div class="line"><span>❌ Missed tasks</span><b>${-((total-completed)*5).toFixed(1)}</b></div>
-      <div class="line"><span>😴 Wasted time</span><b>${-(wasted*3).toFixed(1)}</b></div>
-      <div class="line"><span>🔥 Satisfaction</span><b>${satisfaction}/10</b></div>
-    </div>`;
-  showToast("Entry saved ✓");
-  render();
-});
 
-function buildStats(){
-  const stats={};
-  MEMBERS.forEach(n=>stats[n]={points:0,hours:0,completed:0,total:0,wasted:0,days:0});
-  entries.forEach(e=>{
-    if(!stats[e.name])stats[e.name]={points:0,hours:0,completed:0,total:0,wasted:0,days:0};
-    const s=stats[e.name];
-    s.points+=e.points;s.hours+=e.hours;s.completed+=e.completed;s.total+=e.total;s.wasted+=e.wasted;s.days++;
-  });
-  return stats;
-}
 
-function renderBoard(){
-  const stats=buildStats();
-  const ranked=MEMBERS.map(n=>[n,stats[n]]).sort((a,b)=>b[1].points-a[1].points);
-  const max=Math.max(1,...ranked.map(x=>x[1].points));
-  $("boardList").innerHTML=ranked.map(([name,s],i)=>{
-    const taskPct=s.total?Math.round(s.completed/s.total*100):0;
-    const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":`${i+1}`;
-    return `<div class="leader">
-      <div class="rank">${medal}</div>
-      <div class="avatar">${initials(name)}</div>
-      <div class="leader-main">
-        <div class="leader-name">${name}</div>
-        <div class="leader-meta">${s.hours.toFixed(1)}h · ${s.days} days · ${taskPct}% tasks</div>
-        <div class="progress"><span style="width:${Math.max(0,Math.min(100,s.points/max*100))}%"></span></div>
+    <div class="stat">
+
+      <div class="label">
+        Points
       </div>
-      <div class="points">${s.points.toFixed(1)}</div>
+
+      <div class="value">
+        ${totalPoints.toFixed(0)}
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="label">
+        Study hours
+      </div>
+
+      <div class="value">
+        ${totalHours.toFixed(1)}
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="label">
+        Tasks done
+      </div>
+
+      <div class="value">
+        ${totalTasks}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================
+   HISTORY
+============================================ */
+
+async function renderHistory(){
+
+  $("historyList").innerHTML =
+    `<div class="loading">
+      Loading history...
     </div>`;
-  }).join("");
 
-  const totalPoints=entries.reduce((a,e)=>a+e.points,0);
-  const totalHours=entries.reduce((a,e)=>a+e.hours,0);
-  const totalTasks=entries.reduce((a,e)=>a+e.completed,0);
-  $("groupStats").innerHTML=`
-    <div class="stat"><div class="label">Points</div><div class="value">${totalPoints.toFixed(0)}</div></div>
-    <div class="stat"><div class="label">Study hours</div><div class="value">${totalHours.toFixed(1)}</div></div>
-    <div class="stat"><div class="label">Tasks done</div><div class="value">${totalTasks}</div></div>`;
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("study_logs")
+      .select(
+        `
+        study_date,
+        effective_hours,
+        wasted_hours,
+        satisfaction,
+        tasks_completed,
+        tasks_total,
+        profiles (
+          display_name
+        )
+        `
+      )
+      .order(
+        "study_date",
+        {
+          ascending:false
+        }
+      )
+      .limit(50);
+
+
+  if(error){
+
+    console.error(error);
+
+    $("historyList").innerHTML =
+      `<div class="empty">
+        Could not load history.
+      </div>`;
+
+    return;
+
+  }
+
+
+  if(!data.length){
+
+    $("historyList").innerHTML =
+      `<div class="empty">
+        No entries yet.
+      </div>`;
+
+    return;
+
+  }
+
+
+  $("historyList").innerHTML =
+    data.map(
+      entry => {
+
+        const profile =
+          Array.isArray(entry.profiles)
+            ? entry.profiles[0]
+            : entry.profiles;
+
+
+        const name =
+          profile?.display_name ||
+          "Student";
+
+
+        const hours =
+          Number(
+            entry.effective_hours
+          ) || 0;
+
+
+        const wasted =
+          Number(
+            entry.wasted_hours
+          ) || 0;
+
+
+        const completed =
+          Number(
+            entry.tasks_completed
+          ) || 0;
+
+
+        const total =
+          Number(
+            entry.tasks_total
+          ) || 0;
+
+
+        const satisfaction =
+          Number(
+            entry.satisfaction
+          ) || 0;
+
+
+        const points =
+          (hours * 12) +
+          (completed * 10) -
+          ((total - completed) * 5) -
+          (wasted * 3);
+
+
+        return `
+
+          <div class="history-row">
+
+            <div>
+
+              <div class="history-name">
+
+                ${escapeHtml(name)}
+
+              </div>
+
+
+              <div class="history-meta">
+
+                ${formatDate(
+                  entry.study_date
+                )}
+
+                ·
+
+                ${hours}h
+
+                ·
+
+                ${completed}/${total}
+                tasks
+
+                ·
+
+                sat
+                ${satisfaction}/10
+
+              </div>
+
+            </div>
+
+
+            <div class="history-points">
+
+              ${points.toFixed(1)}
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
 }
 
-function renderHistory(){
-  const sorted=[...entries].sort((a,b)=>b.date.localeCompare(a.date)||b.name.localeCompare(a.name)).slice(0,50);
-  $("historyList").innerHTML=sorted.length?sorted.map(e=>`
-    <div class="history-row">
-      <div><div class="history-name">${e.name}</div><div class="history-meta">${formatDate(e.date)} · ${e.hours}h · ${e.completed}/${e.total} tasks · sat ${e.satisfaction}/10</div></div>
-      <div class="history-points">${e.points.toFixed(1)}</div>
-    </div>`).join(""):`<div class="empty">No entries yet.</div>`;
+
+/* ============================================
+   REFRESH EVERYTHING
+============================================ */
+
+async function refreshAll(){
+
+  await renderBoard();
+
+  await renderHistory();
+
 }
-function render(){renderBoard();renderHistory();}
-render();
+
+
+/* ============================================
+   NAVIGATION
+============================================ */
+
+document
+  .querySelectorAll(".nav button")
+  .forEach(
+    btn => {
+
+      btn.addEventListener(
+        "click",
+        async () => {
+
+          document
+            .querySelectorAll(".nav button")
+            .forEach(
+              b =>
+                b.classList.remove(
+                  "active"
+                )
+            );
+
+
+          document
+            .querySelectorAll(".view")
+            .forEach(
+              v =>
+                v.classList.remove(
+                  "active"
+                )
+            );
+
+
+          btn.classList.add(
+            "active"
+          );
+
+
+          $(btn.dataset.view)
+            .classList.add(
+              "active"
+            );
+
+
+          if(
+            btn.dataset.view ===
+            "leaderboard"
+          ){
+
+            await renderBoard();
+
+          }
+
+
+          if(
+            btn.dataset.view ===
+            "history"
+          ){
+
+            await renderHistory();
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+/* ============================================
+   SECURITY / HTML ESCAPING
+============================================ */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* ============================================
+   INITIALIZATION
+============================================ */
+
+$("date").value =
+  localDate();
+
+
+$("todayText").textContent =
+  new Date().toLocaleDateString(
+    "en-IN",
+    {
+      weekday:"short",
+      day:"2-digit",
+      month:"short"
+    }
+  );
+
+
+(async function(){
+
+  const {
+    data
+  } =
+    await supabaseClient.auth.getSession();
+
+
+  if(
+    data &&
+    data.session &&
+    data.session.user
+  ){
+
+    currentUser =
+      data.session.user;
+
+    await loadProfile();
+
+    showMainApp();
+
+    await refreshAll();
+
+  }else{
+
+    showAuthScreen();
+
+  }
+
+})();
+
 </script>
+
 </body>
 </html>

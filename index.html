@@ -790,7 +790,7 @@ input::placeholder{
 .streak-fire{font-size:18px}
 .personal-stats{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,1fr);
   gap:7px;
 }
 .personal-stat{
@@ -842,49 +842,10 @@ input::placeholder{
 }
 @media(max-width:520px){
   .personal-hero{grid-template-columns:1fr 1fr}
-  .personal-stats{grid-template-columns:1fr 1fr 1fr}
+  .personal-stats{grid-template-columns:1fr 1fr}
   .nav{gap:2px}
   .nav button{font-size:9.5px;padding:8px 2px}
 }
-
-
-
-/* =========================
-   FINAL COMPACT TASK + BOARD
-========================= */
-.task-summary{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
-.task-summary-title{font-size:14px;font-weight:800}
-.task-summary-count{font-size:11px;color:var(--muted)}
-.task-progress{height:4px;background:#292929;border-radius:8px;overflow:hidden;margin-top:6px}
-.task-progress span{display:block;height:100%;background:#aaa;border-radius:8px}
-.task-person{background:#101010;border:1px solid var(--border);border-radius:11px;padding:9px 10px;margin-bottom:7px}
-.task-person-head{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.task-person-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;background:#242424;border:1px solid #353535;display:grid;place-items:center;font-size:9px;font-weight:800;flex:0 0 30px}
-.task-person-name{font-size:12px;font-weight:800;flex:1;min-width:0}
-.task-person-count{font-size:10px;color:var(--muted)}
-.task-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-top:1px solid #292929}
-.task-check{width:16px;height:16px;flex:0 0 16px;cursor:pointer}
-.task-label{font-size:11px;line-height:1.35;flex:1;word-break:break-word}
-.task-label.done{text-decoration:line-through;color:#666}
-.task-delete{border:0;background:none;color:#666;padding:2px 4px;font-size:11px}
-.task-add{display:flex;gap:6px;margin-top:7px}
-.task-add input{height:34px;font-size:11px}
-.task-add button{height:34px;border:1px solid #444;background:#e9e9e9;color:#111;border-radius:8px;padding:0 10px;font-size:11px;font-weight:800}
-.task-owner-note{font-size:9px;color:#666;margin-top:6px}
-.board-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
-.board-refresh{border:1px solid #333;background:#191919;color:var(--muted);border-radius:7px;padding:5px 8px;font-size:10px}
-.board-total{font-size:10px;color:var(--muted);margin-bottom:5px}
-.leader{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
-.leader:last-child{border-bottom:0}
-.leader.me{background:#1b1b1b;border-radius:9px;padding:9px 7px;margin:0 -7px}
-.rank{width:23px;text-align:center;color:var(--muted);font-weight:800;font-size:12px}
-.avatar{width:32px;height:32px;border-radius:50%;background:#242424;border:1px solid #353535;display:grid;place-items:center;font-size:10px;font-weight:800;flex:0 0 32px;object-fit:cover}
-.leader-main{flex:1;min-width:0}
-.leader-name{font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.leader-meta{font-size:9px;color:var(--muted);margin-top:2px}
-.points{font-size:13px;font-weight:850;min-width:42px;text-align:right}
-.progress{height:3px;background:#292929;border-radius:4px;margin-top:5px;overflow:hidden}
-.progress span{display:block;height:100%;background:#aaa;border-radius:4px}
 
 </style>
 </head>
@@ -1036,14 +997,10 @@ input::placeholder{
           <div class="profile-copy">
             <strong id="myProfileName">Loading...</strong>
             <span id="myProfileUsername"></span>
-            <div class="photo-actions">
-              <input id="avatarInput" type="file" accept="image/jpeg,image/png,image/webp" class="hidden">
-              <button class="photo-btn" id="changeAvatarBtn">📷 Change photo</button>
-              <button class="photo-btn danger hidden" id="removeAvatarBtn">Remove photo</button>
-            </div>
+            <span style="margin-top:6px" id="myProfilePoints">0 points</span>
           </div>
         </div>
-        <div class="small-note">Your photo is shown beside your name on the shared leaderboard and task panel.</div>
+        <div class="small-note">Your initials and points are shown across the app. Profile photos are disabled because your current profiles table does not contain an avatar column.</div>
       </div>
 
       <div class="card">
@@ -1232,6 +1189,10 @@ input::placeholder{
         <p class="card-title">📚 Study totals</p>
         <div class="personal-stats">
           <div class="personal-stat">
+            <span>TOTAL POINTS</span>
+            <b id="personalTotalPoints">0</b>
+          </div>
+          <div class="personal-stat">
             <span>TOTAL HOURS</span>
             <b id="personalTotalHours">0h</b>
           </div>
@@ -1273,15 +1234,35 @@ input::placeholder{
     <section class="view" id="leaderboard">
 
       <div class="card">
-        <div class="board-header">
-          <p class="card-title" style="margin:0">🏆 Leaderboard</p>
-          <button class="board-refresh" onclick="renderBoard()">↻ Refresh</button>
+
+        <p class="card-title">
+          🏆 All-time leaderboard
+        </p>
+
+        <div id="boardList">
+          <div class="loading">
+            Loading leaderboard...
+          </div>
         </div>
-        <div class="board-total" id="boardTotal">Loading...</div>
-        <div id="boardList"><div class="loading">Loading leaderboard...</div></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <p class="card-title">
+          Group totals
+        </p>
+
+        <div
+          class="stat-grid"
+          id="groupStats"
+        ></div>
+
       </div>
 
     </section>
+
 
 
     <!-- =========================
@@ -1864,7 +1845,10 @@ async function loadProfile(){
     "Logged in as " +
     currentProfile.display_name +
     " · @" +
-    currentProfile.username;
+    currentProfile.username +
+    " · " +
+    (Number(currentProfile.points)||0).toFixed(0) +
+    " points";
 
   renderMyProfile();
 
@@ -1940,32 +1924,47 @@ async function renderPersonal(){
   }
 
   const rows=logs||[];
-  const totalHours=rows.reduce((s,r)=>s+(Number(r.effective_hours)||0),0);
+  const totalHours=rows.reduce(
+    (s,r)=>s+(Number(r.effective_hours)||0),
+    0
+  );
 
   const uniqueDates=[...new Set(
-    rows.filter(r=>Number(r.effective_hours)>0).map(r=>r.study_date)
+    rows
+      .filter(r=>Number(r.effective_hours)>0)
+      .map(r=>r.study_date)
   )].sort();
 
-  const firstDate=uniqueDates.length ? new Date(uniqueDates[0]+"T00:00:00") : new Date();
+  const firstDate=uniqueDates.length
+    ? new Date(uniqueDates[0]+"T00:00:00")
+    : new Date();
+
   const today=new Date();
+
   const elapsedDays=Math.max(
     1,
-    Math.floor((new Date(today.getFullYear(),today.getMonth(),today.getDate())-firstDate)/86400000)+1
+    Math.floor(
+      (
+        new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate()
+        )-firstDate
+      )/86400000
+    )+1
   );
+
   const avgDay=totalHours/elapsedDays;
   const avgWeek=avgDay*7;
   const streak=calculateCurrentStreak(rows);
+  const basePoints=Number(currentProfile?.points)||0;
 
+  $("personalTotalPoints").textContent=basePoints.toFixed(0);
   $("personalTotalHours").textContent=fmtHours(totalHours);
   $("personalAvgDay").textContent=fmtHours(avgDay);
   $("personalAvgWeek").textContent=fmtHours(avgWeek);
   $("personalStreak").textContent=streak;
 
-  const basePoints=Number(currentProfile?.points)||0;
-
-  // The profile points already include unlocked achievement bonuses.
-  // Track achievement state in a dedicated personal table so each bonus
-  // can only be awarded once.
   const {data:earned,error:earnedError}=await supabaseClient
     .from("user_achievements")
     .select("achievement_id,bonus_points,unlocked_at")
@@ -1974,12 +1973,13 @@ async function renderPersonal(){
   if(earnedError){
     console.error("ACHIEVEMENT LOAD:",earnedError);
     $("achievementList").innerHTML=
-      `<div class="empty">Achievements need the personal-achievements SQL migration.</div>`;
+      `<div class="empty">Could not load achievements.</div>`;
     return;
   }
 
-  const earnedMap=new Map((earned||[]).map(x=>[x.achievement_id,x]));
-  const unlockedIds=new Set(earnedMap.keys());
+  const earnedMap=new Map(
+    (earned||[]).map(x=>[x.achievement_id,x])
+  );
 
   const eligible=ACHIEVEMENTS.filter(a=>{
     if(a.type==="hours") return totalHours>=a.target;
@@ -1988,52 +1988,86 @@ async function renderPersonal(){
     return false;
   });
 
-  // Award newly eligible achievements through one server-side RPC.
+  let newlyUnlocked=false;
+
   for(const a of eligible){
-    if(!unlockedIds.has(a.id)){
-      const {error:awardError}=await supabaseClient.rpc("unlock_achievement",{
-        p_achievement_id:a.id,
-        p_bonus_points:a.bonus
-      });
-      if(awardError) console.error("ACHIEVEMENT UNLOCK:",awardError);
+    if(!earnedMap.has(a.id)){
+      const {error:awardError}=await supabaseClient.rpc(
+        "unlock_achievement",
+        {
+          p_achievement_id:a.id,
+          p_bonus_points:a.bonus
+        }
+      );
+
+      if(awardError){
+        console.error("ACHIEVEMENT UNLOCK:",awardError);
+      }else{
+        newlyUnlocked=true;
+      }
     }
   }
 
-  // Reload after awarding so the UI shows the final personal totals.
-  const {data:earned2}=await supabaseClient
+  const {data:earned2,error:earned2Error}=await supabaseClient
     .from("user_achievements")
     .select("achievement_id,bonus_points,unlocked_at")
     .eq("user_id",currentUser.id);
 
+  if(earned2Error){
+    console.error("ACHIEVEMENT RELOAD:",earned2Error);
+  }
+
   const finalEarned=earned2||[];
-  const finalMap=new Map(finalEarned.map(x=>[x.achievement_id,x]));
-  const bonusTotal=finalEarned.reduce((s,x)=>s+(Number(x.bonus_points)||0),0);
+  const finalMap=new Map(
+    finalEarned.map(x=>[x.achievement_id,x])
+  );
+
+  const bonusTotal=finalEarned.reduce(
+    (s,x)=>s+(Number(x.bonus_points)||0),
+    0
+  );
 
   $("achievementCount").textContent=finalEarned.length;
-  $("achievementPoints").textContent=`+${bonusTotal.toFixed(0)} pts`;
+  $("achievementPoints").textContent=
+    `+${bonusTotal.toFixed(0)} pts`;
 
-  $("achievementList").innerHTML=ACHIEVEMENTS.map(a=>{
-    const done=finalMap.has(a.id);
-    let progress="";
-    if(a.type==="hours") progress=`${fmtHours(totalHours)} / ${a.target}h`;
-    if(a.type==="points") progress=`${basePoints.toFixed(0)} / ${a.target} pts`;
-    if(a.type==="streak") progress=`${streak} / ${a.target} days`;
+  $("achievementList").innerHTML=
+    ACHIEVEMENTS.map(a=>{
+      const done=finalMap.has(a.id);
+      let progress="";
 
-    return `
-      <div class="achievement ${done?"unlocked":"locked"}">
-        <div class="achievement-icon">${a.icon}</div>
-        <div class="achievement-main">
-          <div class="achievement-title">${a.title}</div>
-          <div class="achievement-desc">${a.desc}</div>
-          <div class="achievement-status">${done?"✓ Unlocked":"Progress: "+progress}</div>
+      if(a.type==="hours"){
+        progress=`${fmtHours(totalHours)} / ${a.target}h`;
+      }
+
+      if(a.type==="points"){
+        progress=`${basePoints.toFixed(0)} / ${a.target} pts`;
+      }
+
+      if(a.type==="streak"){
+        progress=`${streak} / ${a.target} days`;
+      }
+
+      return `
+        <div class="achievement ${done?"unlocked":"locked"}">
+          <div class="achievement-icon">${a.icon}</div>
+
+          <div class="achievement-main">
+            <div class="achievement-title">${a.title}</div>
+            <div class="achievement-desc">${a.desc}</div>
+            <div class="achievement-status">
+              ${done ? "✓ Unlocked" : "Progress: "+progress}
+            </div>
+          </div>
+
+          <div class="achievement-bonus">+${a.bonus}</div>
         </div>
-        <div class="achievement-bonus">+${a.bonus}</div>
-      </div>
-    `;
-  }).join("");
+      `;
+    }).join("");
 
-  if(eligible.some(a=>!unlockedIds.has(a.id))){
+  if(newlyUnlocked){
     showToast("Achievement unlocked 🏅");
+    await loadProfile();
   }
 }
 
@@ -2298,120 +2332,37 @@ $("saveTestBtn").addEventListener("click",addTestScore);
 
 
 /* ============================================
-   PROFILE PHOTO
+   PROFILE DISPLAY
+   Uses initials because profiles has no avatar_url.
 ============================================ */
 
 function avatarMarkup(profile, className="profile-photo"){
-  const name = profile?.display_name || "?";
-  const initialsText = initials(name);
-  if(profile?.avatar_url){
-    return `<img class="${className} avatar-image" src="${escapeHtml(profile.avatar_url)}" alt="${escapeHtml(name)}">`;
-  }
-  return `<div class="${className}">${escapeHtml(initialsText)}</div>`;
+  return `<div class="${className}">${escapeHtml(
+    initials(profile?.display_name)
+  )}</div>`;
 }
 
 function renderMyProfile(){
   if(!currentProfile) return;
-  $("myProfileAvatar").outerHTML = avatarMarkup(currentProfile, "profile-photo");
-  const avatar = document.querySelector(".profile-photo");
-  if(avatar) avatar.id = "myProfileAvatar";
 
-  $("myProfileName").textContent = currentProfile.display_name || "Student";
-  $("myProfileUsername").textContent = currentProfile.username ? "@" + currentProfile.username : "";
+  const avatar=$("myProfileAvatar");
 
-  if(currentProfile.avatar_url) $("removeAvatarBtn").classList.remove("hidden");
-  else $("removeAvatarBtn").classList.add("hidden");
+  if(avatar){
+    avatar.textContent=
+      initials(currentProfile.display_name);
+  }
+
+  $("myProfileName").textContent=
+    currentProfile.display_name || "Student";
+
+  $("myProfileUsername").textContent=
+    currentProfile.username
+      ? "@" + currentProfile.username
+      : "";
+
+  $("myProfilePoints").textContent=
+    `${Number(currentProfile.points)||0} points`;
 }
-
-async function uploadAvatar(file){
-  if(!currentUser || !file) return;
-
-  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
-    showToast("Use JPG, PNG or WebP.");
-    return;
-  }
-
-  if(file.size > 2 * 1024 * 1024){
-    showToast("Photo must be 2 MB or smaller.");
-    return;
-  }
-
-  $("changeAvatarBtn").disabled = true;
-  $("changeAvatarBtn").textContent = "Uploading...";
-
-  const ext = file.type === "image/png" ? "png" :
-              file.type === "image/webp" ? "webp" : "jpg";
-  const path = `${currentUser.id}/avatar.${ext}`;
-
-  const { error: uploadError } = await supabaseClient.storage
-    .from("avatars")
-    .upload(path, file, { upsert:true, contentType:file.type, cacheControl:"3600" });
-
-  if(uploadError){
-    console.error(uploadError);
-    showToast(uploadError.message);
-    $("changeAvatarBtn").disabled = false;
-    $("changeAvatarBtn").textContent = "📷 Change photo";
-    return;
-  }
-
-  const { data: publicData } = supabaseClient.storage
-    .from("avatars")
-    .getPublicUrl(path);
-
-  const avatarUrl = publicData.publicUrl + `?v=${Date.now()}`;
-
-  const { data, error } = await supabaseClient
-    .from("profiles")
-    .update({avatar_url: avatarUrl})
-    .eq("id", currentUser.id)
-    .select()
-    .single();
-
-  $("changeAvatarBtn").disabled = false;
-  $("changeAvatarBtn").textContent = "📷 Change photo";
-
-  if(error){
-    console.error(error);
-    showToast(error.message);
-    return;
-  }
-
-  currentProfile = data;
-  renderMyProfile();
-  showToast("Profile photo updated ✓");
-  await renderBoard();
-  await renderTasks();
-}
-
-async function removeAvatar(){
-  if(!currentUser) return;
-  if(!confirm("Remove your profile photo?")) return;
-
-  const { error } = await supabaseClient
-    .from("profiles")
-    .update({avatar_url:null})
-    .eq("id", currentUser.id);
-
-  if(error){
-    showToast(error.message);
-    return;
-  }
-
-  currentProfile.avatar_url = null;
-  renderMyProfile();
-  showToast("Profile photo removed");
-  await renderBoard();
-  await renderTasks();
-}
-
-$("changeAvatarBtn").addEventListener("click", () => $("avatarInput").click());
-$("avatarInput").addEventListener("change", e => {
-  const file = e.target.files?.[0];
-  if(file) uploadAvatar(file);
-  e.target.value = "";
-});
-$("removeAvatarBtn").addEventListener("click", removeAvatar);
 
 
 /* ============================================
@@ -2425,140 +2376,261 @@ function taskDateLabel(){
 }
 
 async function getTodayTasks(){
-  const { data, error } = await supabaseClient
+  const {data,error}=await supabaseClient
     .from("tasks")
-    .select(`
-      id,user_id,task_text,completed,task_date,created_at,
-      profiles (id,display_name,username,avatar_url)
-    `)
-    .eq("task_date", localDate())
-    .order("created_at", {ascending:true});
+    .select(
+      "id,student_id,task_name,completed,task_date,created_at"
+    )
+    .eq("task_date",localDate())
+    .order("created_at",{ascending:true});
 
   if(error){
-    console.error("TASK LOAD:", error);
+    console.error("TASK LOAD:",error);
     return {data:null,error};
   }
-  return {data:data || [],error:null};
-}
 
-function renderTaskPersonAvatar(profile){
-  if(profile?.avatar_url){
-    return `<img class="task-person-avatar" src="${escapeHtml(profile.avatar_url)}" alt="">`;
-  }
-  return `<div class="task-person-avatar">${escapeHtml(initials(profile?.display_name))}</div>`;
+  return {data:data||[],error:null};
 }
 
 async function renderTasks(){
-  const board = $("taskBoard");
+  const board=$("taskBoard");
+
   if(!board) return;
 
-  $("taskDateLabel").textContent = taskDateLabel();
-  board.innerHTML = `<div class="loading">Loading today's tasks...</div>`;
+  $("taskDateLabel").textContent=
+    taskDateLabel();
 
-  const {data,error} = await getTodayTasks();
+  board.innerHTML=
+    `<div class="loading">Loading today's tasks...</div>`;
+
+  const {data,error}=await getTodayTasks();
 
   if(error){
-    board.innerHTML = `<div class="empty">Could not load tasks. Make sure the task table has been created in Supabase.</div>`;
+    board.innerHTML=
+      `<div class="empty">
+        Could not load tasks: ${escapeHtml(error.message)}
+      </div>`;
     return;
   }
 
-  const groups = new Map();
+  const {data:profiles,error:profilesError}=
+    await supabaseClient
+      .from("profiles")
+      .select("id,display_name,username")
+      .order("display_name",{ascending:true});
 
-  data.forEach(task => {
-    const profile = Array.isArray(task.profiles) ? task.profiles[0] : task.profiles;
-    const id = task.user_id;
+  if(profilesError){
+    console.error("TASK PROFILE LOAD:",profilesError);
+
+    board.innerHTML=
+      `<div class="empty">
+        Could not load task members: ${escapeHtml(profilesError.message)}
+      </div>`;
+
+    return;
+  }
+
+  const profileMap=new Map(
+    (profiles||[]).map(p=>[p.id,p])
+  );
+
+  const groups=new Map();
+
+  (data||[]).forEach(task=>{
+    const id=task.student_id;
+
     if(!groups.has(id)){
-      groups.set(id,{profile:profile || {display_name:"Student"},tasks:[]});
+      groups.set(id,{
+        profile:profileMap.get(id)||{
+          id,
+          display_name:"Student",
+          username:""
+        },
+        tasks:[]
+      });
     }
+
     groups.get(id).tasks.push(task);
   });
 
-  // Show every registered account, including members who have no tasks today.
-  const {data:profiles,error:profilesError} = await supabaseClient
-    .from("profiles")
-    .select("id,display_name,username,avatar_url")
-    .order("display_name",{ascending:true});
-
-  if(!profilesError){
-    profiles.forEach(profile => {
-      if(!groups.has(profile.id)) groups.set(profile.id,{profile,tasks:[]});
-      else groups.get(profile.id).profile = profile;
-    });
-  }
+  (profiles||[]).forEach(profile=>{
+    if(!groups.has(profile.id)){
+      groups.set(profile.id,{
+        profile,
+        tasks:[]
+      });
+    }
+  });
 
   if(!groups.size){
-    board.innerHTML = `<div class="empty">No members found.</div>`;
-    $("myTaskCount").textContent = "0/0 done";
-    $("myTaskProgress").style.width = "0%";
+    board.innerHTML=
+      `<div class="empty">No members found.</div>`;
+
+    $("myTaskCount").textContent="0/0 done";
+    $("myTaskProgress").style.width="0%";
     return;
   }
 
-  let myTotal=0,myDone=0;
+  let myTotal=0;
+  let myDone=0;
 
-  board.innerHTML = [...groups.values()].map(group => {
-    const profile=group.profile;
-    const tasks=group.tasks;
-    const done=tasks.filter(t=>t.completed).length;
+  board.innerHTML=
+    [...groups.values()]
+      .map(group=>{
+        const profile=group.profile;
+        const tasks=group.tasks;
 
-    if(currentUser && profile.id===currentUser.id){
-      myTotal=tasks.length;
-      myDone=done;
-    }
+        const done=
+          tasks.filter(t=>t.completed).length;
 
-    const taskRows = tasks.length ? tasks.map(task => {
-      const isMine = currentUser && task.user_id === currentUser.id;
-      return `
-        <div class="task-row">
-          <input class="task-check" type="checkbox"
-            ${task.completed ? "checked" : ""}
-            ${isMine ? "" : "disabled"}
-            onchange="toggleTask('${task.id}', this.checked)">
-          <span class="task-label ${task.completed ? "done" : ""}">${escapeHtml(task.task_text)}</span>
-          ${isMine ? `<button class="task-delete" onclick="deleteTask('${task.id}')">✕</button>` : ""}
-        </div>
-      `;
-    }).join("") : `<div class="empty" style="padding:8px 0">No tasks added yet.</div>`;
+        if(
+          currentUser &&
+          profile.id===currentUser.id
+        ){
+          myTotal=tasks.length;
+          myDone=done;
+        }
 
-    const addBox = currentUser && profile.id===currentUser.id ? `
-      <div class="task-add">
-        <input id="newTaskInput" placeholder="Add your task..." maxlength="160"
-          onkeydown="if(event.key==='Enter') addTask()">
-        <button onclick="addTask()">+ Task</button>
-      </div>
-      <div class="task-owner-note">Only you can edit your tasks.</div>
-    ` : "";
+        const taskRows=
+          tasks.length
+          ? tasks.map(task=>{
+              const isMine=
+                currentUser &&
+                task.student_id===currentUser.id;
 
-    return `
-      <div class="task-person">
-        <div class="task-person-head">
-          ${renderTaskPersonAvatar(profile)}
-          <div class="task-person-name">${escapeHtml(profile.display_name || "Student")}</div>
-          <div class="task-person-count">${done}/${tasks.length} done</div>
-        </div>
-        ${taskRows}
-        ${addBox}
-      </div>
-    `;
-  }).join("");
+              return `
+                <div class="task-row">
 
-  $("myTaskCount").textContent = `${myDone}/${myTotal} done`;
-  $("myTaskProgress").style.width = myTotal ? `${(myDone/myTotal)*100}%` : "0%";
+                  <input
+                    class="task-check"
+                    type="checkbox"
+                    ${task.completed?"checked":""}
+                    ${isMine?"":"disabled"}
+                    onchange="
+                      toggleTask(
+                        '${task.id}',
+                        this.checked
+                      )
+                    "
+                  >
+
+                  <span
+                    class="task-label
+                    ${task.completed?"done":""}"
+                  >
+                    ${escapeHtml(task.task_name)}
+                  </span>
+
+                  ${
+                    isMine
+                      ? `
+                        <button
+                          class="task-delete"
+                          onclick="
+                            deleteTask('${task.id}')
+                          "
+                        >
+                          ✕
+                        </button>
+                      `
+                      : ""
+                  }
+
+                </div>
+              `;
+            }).join("")
+          : `
+            <div
+              class="empty"
+              style="padding:8px 0"
+            >
+              No tasks added yet.
+            </div>
+          `;
+
+        const addBox=
+          currentUser &&
+          profile.id===currentUser.id
+          ? `
+            <div class="task-add">
+
+              <input
+                id="newTaskInput"
+                placeholder="Add your task..."
+                maxlength="160"
+                onkeydown="
+                  if(event.key==='Enter') addTask()
+                "
+              >
+
+              <button onclick="addTask()">
+                + Task
+              </button>
+
+            </div>
+
+            <div class="task-owner-note">
+              Only you can edit your tasks.
+            </div>
+          `
+          : "";
+
+        return `
+          <div class="task-person">
+
+            <div class="task-person-head">
+
+              <div class="task-person-avatar">
+                ${escapeHtml(
+                  initials(profile.display_name)
+                )}
+              </div>
+
+              <div class="task-person-name">
+                ${escapeHtml(
+                  profile.display_name||"Student"
+                )}
+              </div>
+
+              <div class="task-person-count">
+                ${done}/${tasks.length} done
+              </div>
+
+            </div>
+
+            ${taskRows}
+            ${addBox}
+
+          </div>
+        `;
+      })
+      .join("");
+
+  $("myTaskCount").textContent=
+    `${myDone}/${myTotal} done`;
+
+  $("myTaskProgress").style.width=
+    myTotal
+      ? `${(myDone/myTotal)*100}%`
+      : "0%";
 }
 
 async function addTask(){
   if(!currentUser) return;
 
   const input=$("newTaskInput");
+
   if(!input) return;
 
   const text=input.value.trim();
+
   if(!text) return;
 
   const {error}=await supabaseClient
     .from("tasks")
     .insert({
-      user_id:currentUser.id,
-      task_text:text,
+      student_id:currentUser.id,
+      task_name:text,
       completed:false,
       task_date:localDate()
     });
@@ -2571,6 +2643,7 @@ async function addTask(){
 
   input.value="";
   showToast("Task added ✓");
+
   await renderTasks();
 }
 
@@ -2581,7 +2654,7 @@ async function toggleTask(id,completed){
     .from("tasks")
     .update({completed})
     .eq("id",id)
-    .eq("user_id",currentUser.id);
+    .eq("student_id",currentUser.id);
 
   if(error){
     console.error("TASK UPDATE:",error);
@@ -2595,11 +2668,12 @@ async function toggleTask(id,completed){
 
 async function deleteTask(id){
   if(!currentUser) return;
+
   const {error}=await supabaseClient
     .from("tasks")
     .delete()
     .eq("id",id)
-    .eq("user_id",currentUser.id);
+    .eq("student_id",currentUser.id);
 
   if(error){
     console.error("TASK DELETE:",error);
@@ -2607,11 +2681,15 @@ async function deleteTask(id){
     return;
   }
 
+  showToast("Task deleted");
   await renderTasks();
 }
 
 function startRealtime(){
-  stopRealtime();
+  if(taskChannel) supabaseClient.removeChannel(taskChannel);
+  if(profileChannel) supabaseClient.removeChannel(profileChannel);
+  if(testChannel) supabaseClient.removeChannel(testChannel);
+  if(studyChannel) supabaseClient.removeChannel(studyChannel);
 
   taskChannel = supabaseClient
     .channel("shared-tasks-live")
@@ -2624,7 +2702,7 @@ function startRealtime(){
   profileChannel = supabaseClient
     .channel("shared-profiles-live")
     .on("postgres_changes",
-      {event:"*",schema:"public",table:"profiles"},
+      {event:"UPDATE",schema:"public",table:"profiles"},
       () => {
         renderBoard();
         renderTasks();
@@ -2636,23 +2714,23 @@ function startRealtime(){
   testChannel = supabaseClient
     .channel("my-tests-live")
     .on("postgres_changes",
-      {event:"*",schema:"public",table:"test_scores"},
+      {event:"*",schema:"public",table:"test_scores",filter:`student_id=eq.${currentUser.id}`},
       () => {
         renderTests();
         renderBoard();
-        if(currentUser){ loadProfile(); renderPersonal(); }
+        loadProfile();
+        renderPersonal();
       }
     )
     .subscribe();
 
   studyChannel = supabaseClient
-    .channel("study-live")
+    .channel("my-study-live")
     .on("postgres_changes",
-      {event:"*",schema:"public",table:"study_logs"},
+      {event:"*",schema:"public",table:"study_logs",filter:`student_id=eq.${currentUser.id}`},
       () => {
-        renderBoard();
         renderStudyChart();
-        if(currentUser) renderPersonal();
+        renderPersonal();
       }
     )
     .subscribe();
@@ -2964,62 +3042,214 @@ $("saveBtn").addEventListener(
 ============================================ */
 
 async function renderBoard(){
-  const list=$("boardList");
-  const total=$("boardTotal");
-  if(!list) return;
 
-  list.innerHTML=`<div class="loading">Loading...</div>`;
+  $("boardList").innerHTML =
+    `<div class="loading">
+      Loading leaderboard...
+    </div>`;
 
-  const {data,error}=await supabaseClient
-    .from("profiles")
-    .select("id,username,display_name,points,effective_hours,avatar_url")
-    .order("points",{ascending:false,nullsFirst:false});
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id,username,display_name,points,effective_hours"
+      )
+      .order(
+        "points",
+        {
+          ascending:false
+        }
+      );
+
 
   if(error){
-    console.error("LEADERBOARD ERROR:",error);
-    list.innerHTML=`<div class="empty">Could not load leaderboard.</div>`;
-    if(total) total.textContent="Unable to load";
+
+    console.error(error);
+
+    $("boardList").innerHTML =
+      `<div class="empty">
+        Could not load leaderboard.
+      </div>`;
+
     return;
+
   }
 
-  if(!data || !data.length){
-    list.innerHTML=`<div class="empty">No students yet.</div>`;
-    if(total) total.textContent="0 students";
+
+  if(!data.length){
+
+    $("boardList").innerHTML =
+      `<div class="empty">
+        No students yet.
+      </div>`;
+
     return;
+
   }
 
-  const totalPoints=data.reduce((sum,u)=>sum+(Number(u.points)||0),0);
-  const maxPoints=Math.max(1,...data.map(u=>Number(u.points)||0));
-  if(total) total.textContent=`${data.length} students · ${totalPoints.toFixed(0)} total points`;
 
-  list.innerHTML=data.map((student,index)=>{
-    const points=Number(student.points)||0;
-    const hours=Number(student.effective_hours)||0;
-    const width=Math.min(100,Math.max(0,points/maxPoints*100));
-    const isMe=currentUser && student.id===currentUser.id;
-    const rank=index===0?"🥇":index===1?"🥈":index===2?"🥉":index+1;
-    const avatar=student.avatar_url
-      ? `<img class="avatar" src="${escapeHtml(student.avatar_url)}" alt="">`
-      : `<div class="avatar">${escapeHtml(initials(student.display_name))}</div>`;
+  const max =
+    Math.max(
+      1,
+      ...data.map(
+        student =>
+          Number(student.points) || 0
+      )
+    );
 
-    return `<div class="leader ${isMe?"me":""}">
-      <div class="rank">${rank}</div>
-      ${avatar}
-      <div class="leader-main">
-        <div class="leader-name">${escapeHtml(student.display_name||"Student")}${isMe?" · You":""}</div>
-        <div class="leader-meta">${hours.toFixed(1)}h${student.username?" · @"+escapeHtml(student.username):""}</div>
-        <div class="progress"><span style="width:${width}%"></span></div>
-      </div>
-      <div class="points">${points.toFixed(0)}</div>
-    </div>`;
-  }).join("");
+
+  $("boardList").innerHTML =
+    data.map(
+      (student,index) => {
+
+        const points =
+          Number(student.points) || 0;
+
+        const hours =
+          Number(
+            student.effective_hours
+          ) || 0;
+
+
+        const medal =
+          index === 0
+            ? "🥇"
+            : index === 1
+            ? "🥈"
+            : index === 2
+            ? "🥉"
+            : String(index + 1);
+
+
+        const width =
+          Math.max(
+            0,
+            Math.min(
+              100,
+              points / max * 100
+            )
+          );
+
+
+        const isMe =
+          currentUser &&
+          student.id === currentUser.id;
+
+
+        return `
+
+          <div
+            class="
+              leader
+              ${isMe ? "me" : ""}
+            "
+          >
+
+            <div class="rank">
+              ${medal}
+            </div>
+
+
+            <div class="avatar">
+              ${escapeHtml(initials(student.display_name))}
+            </div>
+
+
+            <div class="leader-main">
+
+              <div class="leader-name">
+
+                ${escapeHtml(
+                  student.display_name
+                )}
+
+                ${
+                  isMe
+                    ? " · You"
+                    : ""
+                }
+
+              </div>
+
+
+              <div class="leader-meta">
+
+                ${hours.toFixed(1)}h
+
+                ·
+
+                ${student.username
+                  ? "@" +
+                    escapeHtml(
+                      student.username
+                    )
+                  : ""
+                }
+
+              </div>
+
+
+              <div class="progress">
+
+                <span
+                  style="
+                    width:${width}%
+                  "
+                ></span>
+
+              </div>
+
+            </div>
+
+
+            <div class="points">
+              ${points.toFixed(0)}
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
+
+  const totalPoints =
+    data.reduce(
+      (sum,student) =>
+        sum +
+        (Number(student.points) || 0),
+      0
+    );
+
+
+  const totalHours =
+    data.reduce(
+      (sum,student) =>
+        sum +
+        (Number(
+          student.effective_hours
+        ) || 0),
+      0
+    );
+
+
+  await renderGroupStats(
+    data,
+    totalPoints,
+    totalHours
+  );
+
 }
 
 
 /* ============================================
    GROUP STATS
 ============================================ */
-
 
 async function renderGroupStats(
   students,

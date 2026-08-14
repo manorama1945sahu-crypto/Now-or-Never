@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>Study Accountability</title>
+<style>
+:root{
+  --bg:#0b0b0b;
+  --surface:#151515;
+  --surface2:#1d1d1d;
+  --border:#2b2b2b;
+  --text:#f2f2f2;
+  --muted:#929292;
+  --soft:#c9c9c9;
+  --white:#fff;
+  --green:#b8e0c2;
+  --red:#e4a4a4;
+  --yellow:#ddd09b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:0 auto;padding:22px 16px 44px}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{
+  width:38px;height:38px;border:1px solid var(--border);border-radius:11px;
+  display:grid;place-items:center;background:#111;font-size:18px
+}
+h1{font-size:19px;letter-spacing:-.3px;margin:0;font-weight:750}
+.header-date{font-size:12px;color:var(--muted)}
+.nav{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  padding:4px;background:#101010;border:1px solid var(--border);border-radius:12px;margin-bottom:16px
+}
+.nav button{
+  border:0;background:transparent;color:var(--muted);padding:9px 6px;border-radius:8px;font-size:13px;font-weight:650
+}
+.nav button.active{background:#242424;color:var(--text)}
+.view{display:none;animation:fade .18s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:.4;transform:translateY(2px)}to{opacity:1;transform:none}}
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:15px;
+  padding:16px;margin-bottom:12px
+}
+.card-title{font-size:14px;font-weight:750;margin:0 0 14px}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field.full{grid-column:1/-1}
+input,select{
+  width:100%;height:44px;border-radius:10px;border:1px solid #303030;
+  background:#101010;color:var(--text);outline:none;padding:0 12px;
+  transition:border-color .15s,background .15s
+}
+input:focus,select:focus{border-color:#686868;background:#131313}
+input::placeholder{color:#666}
+.primary{
+  width:100%;height:46px;margin-top:14px;border:1px solid #444;border-radius:10px;
+  background:#f1f1f1;color:#0a0a0a;font-weight:800;transition:transform .12s,background .12s
+}
+.primary:active{transform:scale(.99);background:#d8d8d8}
+.notice{font-size:12px;color:var(--muted);line-height:1.55;margin:0 0 14px}
+.result{display:none}
+.result.show{display:block}
+.result-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.score{font-size:42px;line-height:1;font-weight:850;letter-spacing:-1.5px}
+.score.pos{color:var(--green)}.score.neg{color:var(--red)}
+.result-name{font-size:13px;color:var(--muted);text-align:right}
+.breakdown{margin-top:16px;border-top:1px solid var(--border)}
+.line{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.line span:first-child{color:var(--muted)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#111;border:1px solid var(--border);border-radius:11px;padding:12px}
+.stat .value{font-size:20px;font-weight:800;margin-top:4px}
+.stat .label{font-size:11px;color:var(--muted)}
+.leader{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--border)}
+.leader:last-child{border-bottom:0}
+.rank{width:25px;text-align:center;color:var(--muted);font-weight:750}
+.avatar{width:36px;height:36px;border-radius:50%;background:#242424;border:1px solid #353535;display:grid;place-items:center;font-size:12px;font-weight:800}
+.leader-main{flex:1;min-width:0}
+.leader-name{font-size:14px;font-weight:700}
+.leader-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.points{font-size:15px;font-weight:800}
+.progress{height:4px;background:#292929;border-radius:4px;margin-top:7px;overflow:hidden}
+.progress span{display:block;height:100%;background:#aaa;border-radius:4px}
+.empty{color:var(--muted);font-size:13px;text-align:center;padding:20px 0}
+.history-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.history-row:last-child{border-bottom:0}
+.history-name{font-weight:700;font-size:13px}.history-meta{color:var(--muted);font-size:11px;margin-top:3px}
+.history-points{font-weight:800;font-size:13px;white-space:nowrap}
+.small-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}
+.danger{color:var(--red)}
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translate(-50%,15px);
+  background:#eee;color:#111;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;
+  opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 25px #0008;z-index:10
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:480px){
+  .app{padding:17px 13px 38px}
+  .grid{gap:10px}
+  .stat-grid{grid-template-columns:1fr 1fr 1fr}
+  .score{font-size:38px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">📚</div>
+      <div>
+        <h1>Study Accountability</h1>
+        <div class="header-date" id="todayText"></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav">
+    <button class="active" data-view="daily">Daily</button>
+    <button data-view="leaderboard">Leaderboard</button>
+    <button data-view="history">History</button>
+  </nav>
+
+  <main>
+    <section class="view active" id="daily">
+      <div class="card">
+        <p class="card-title">Today's entry</p>
+        <p class="notice">
+          Points: +12 per effective study hour · +10 per completed task ·
+          −5 per missed task · −3 per wasted hour.
+        </p>
+
+        <div class="grid">
+          <div class="field">
+            <label>Member</label>
+            <select id="member">
+              <option>bishnu</option>
+              <option>Ayush</option>
+              <option>Biswajit</option>
+              <option>Surjit</option>
+              <option>Annada</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Date</label>
+            <input id="date" type="date">
+          </div>
+
+          <div class="field">
+            <label>Effective study hours</label>
+            <input id="hours" type="number" min="0" max="24" step="0.25" placeholder="e.g. 4.5">
+          </div>
+
+          <div class="field">
+            <label>Wasted hours</label>
+            <input id="wasted" type="number" min="0" max="24" step="0.25" placeholder="e.g. 1.5">
+          </div>
+
+          <div class="field">
+            <label>Total tasks</label>
+            <input id="total" type="number" min="0" step="1" placeholder="e.g. 7">
+          </div>
+
+          <div class="field">
+            <label>Completed tasks</label>
+            <input id="completed" type="number" min="0" step="1" placeholder="e.g. 6">
+          </div>
+
+          <div class="field full">
+            <label>Satisfaction · 0–10</label>
+            <input id="satisfaction" type="number" min="0" max="10" step="0.5" placeholder="e.g. 8">
+          </div>
+        </div>
+
+        <button class="primary" id="saveBtn">Calculate & save</button>
+      </div>
+
+      <div class="card result" id="result"></div>
+    </section>
+
+    <section class="view" id="leaderboard">
+      <div class="card">
+        <p class="card-title">🏆 All-time leaderboard</p>
+        <div id="boardList"></div>
+      </div>
+
+      <div class="card">
+        <p class="card-title">Group totals</p>
+        <div class="stat-grid" id="groupStats"></div>
+      </div>
+    </section>
+
+    <section class="view" id="history">
+      <div class="card">
+        <p class="card-title">Recent entries</p>
+        <div id="historyList"></div>
+      </div>
+      <div class="card">
+        <p class="small-note">
+          Data is stored in this browser on this device. Clearing browser/site data will remove it.
+          This version is local; a shared online database can be connected later.
+        </p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = "studyAccountabilityMinimalV2";
+const MEMBERS = ["bishnu","Ayush","Biswajit","Surjit","Annada"];
+
+const $ = id => document.getElementById(id);
+let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+function localDate(){
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
+function formatDate(value){
+  return new Date(value+"T00:00:00").toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+}
+function pointsFor(hours,total,completed,wasted){
+  const missed = total - completed;
+  return (hours*12) + (completed*10) - (missed*5) - (wasted*3);
+}
+function showToast(message){
+  const t=$("toast"); t.textContent=message; t.classList.add("show");
+  clearTimeout(showToast.timer); showToast.timer=setTimeout(()=>t.classList.remove("show"),2200);
+}
+function initials(name){ return name.slice(0,2).toUpperCase(); }
+
+$("date").value=localDate();
+$("todayText").textContent=new Date().toLocaleDateString("en-IN",{weekday:"short",day:"2-digit",month:"short"});
+
+document.querySelectorAll(".nav button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    btn.classList.add("active");
+    $(btn.dataset.view).classList.add("active");
+    render();
+  });
+});
+
+$("saveBtn").addEventListener("click",()=>{
+  const name=$("member").value;
+  const date=$("date").value;
+  const hours=Number($("hours").value)||0;
+  const wasted=Number($("wasted").value)||0;
+  const total=Number($("total").value)||0;
+  const completed=Number($("completed").value)||0;
+  const satisfaction=Number($("satisfaction").value);
+
+  if(!date){showToast("Choose a date.");return;}
+  if(hours<0||wasted<0||hours>24||wasted>24){showToast("Hours must be between 0 and 24.");return;}
+  if(total<0||completed<0||completed>total){showToast("Check the task numbers.");return;}
+  if(Number.isNaN(satisfaction)||satisfaction<0||satisfaction>10){showToast("Satisfaction must be 0–10.");return;}
+
+  const points=pointsFor(hours,total,completed,wasted);
+
+  entries=entries.filter(e=>!(e.name===name && e.date===date));
+  entries.push({name,date,hours,wasted,total,completed,satisfaction,points});
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(entries));
+
+  $("result").classList.add("show");
+  $("result").innerHTML=`
+    <div class="result-top">
+      <div>
+        <div class="muted" style="font-size:12px">Today's score</div>
+        <div class="score ${points>=0?"pos":"neg"}">${points.toFixed(1)}</div>
+      </div>
+      <div class="result-name">${name}<br>${formatDate(date)}</div>
+    </div>
+    <div class="breakdown">
+      <div class="line"><span>📚 Effective study</span><b>+${(hours*12).toFixed(1)}</b></div>
+      <div class="line"><span>✅ Completed tasks</span><b>+${(completed*10).toFixed(1)}</b></div>
+      <div class="line"><span>❌ Missed tasks</span><b>${-((total-completed)*5).toFixed(1)}</b></div>
+      <div class="line"><span>😴 Wasted time</span><b>${-(wasted*3).toFixed(1)}</b></div>
+      <div class="line"><span>🔥 Satisfaction</span><b>${satisfaction}/10</b></div>
+    </div>`;
+  showToast("Entry saved ✓");
+  render();
+});
+
+function buildStats(){
+  const stats={};
+  MEMBERS.forEach(n=>stats[n]={points:0,hours:0,completed:0,total:0,wasted:0,days:0});
+  entries.forEach(e=>{
+    if(!stats[e.name])stats[e.name]={points:0,hours:0,completed:0,total:0,wasted:0,days:0};
+    const s=stats[e.name];
+    s.points+=e.points;s.hours+=e.hours;s.completed+=e.completed;s.total+=e.total;s.wasted+=e.wasted;s.days++;
+  });
+  return stats;
+}
+
+function renderBoard(){
+  const stats=buildStats();
+  const ranked=MEMBERS.map(n=>[n,stats[n]]).sort((a,b)=>b[1].points-a[1].points);
+  const max=Math.max(1,...ranked.map(x=>x[1].points));
+  $("boardList").innerHTML=ranked.map(([name,s],i)=>{
+    const taskPct=s.total?Math.round(s.completed/s.total*100):0;
+    const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":`${i+1}`;
+    return `<div class="leader">
+      <div class="rank">${medal}</div>
+      <div class="avatar">${initials(name)}</div>
+      <div class="leader-main">
+        <div class="leader-name">${name}</div>
+        <div class="leader-meta">${s.hours.toFixed(1)}h · ${s.days} days · ${taskPct}% tasks</div>
+        <div class="progress"><span style="width:${Math.max(0,Math.min(100,s.points/max*100))}%"></span></div>
+      </div>
+      <div class="points">${s.points.toFixed(1)}</div>
+    </div>`;
+  }).join("");
+
+  const totalPoints=entries.reduce((a,e)=>a+e.points,0);
+  const totalHours=entries.reduce((a,e)=>a+e.hours,0);
+  const totalTasks=entries.reduce((a,e)=>a+e.completed,0);
+  $("groupStats").innerHTML=`
+    <div class="stat"><div class="label">Points</div><div class="value">${totalPoints.toFixed(0)}</div></div>
+    <div class="stat"><div class="label">Study hours</div><div class="value">${totalHours.toFixed(1)}</div></div>
+    <div class="stat"><div class="label">Tasks done</div><div class="value">${totalTasks}</div></div>`;
+}
+
+function renderHistory(){
+  const sorted=[...entries].sort((a,b)=>b.date.localeCompare(a.date)||b.name.localeCompare(a.name)).slice(0,50);
+  $("historyList").innerHTML=sorted.length?sorted.map(e=>`
+    <div class="history-row">
+      <div><div class="history-name">${e.name}</div><div class="history-meta">${formatDate(e.date)} · ${e.hours}h · ${e.completed}/${e.total} tasks · sat ${e.satisfaction}/10</div></div>
+      <div class="history-points">${e.points.toFixed(1)}</div>
+    </div>`).join(""):`<div class="empty">No entries yet.</div>`;
+}
+function render(){renderBoard();renderHistory();}
+render();
+</script>
+</body>
+</html>
